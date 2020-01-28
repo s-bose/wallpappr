@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <img id= "test" width= "640" height="320" src="" alt="">
+    <img id= "test" src="" alt="">
   </div>
 </template>
 
@@ -15,13 +15,13 @@ export default {
     msg: String
   },
   created() {
-    axios.get('https://www.reddit.com/r/wallpapers.json')
+    axios.get('https://www.reddit.com/r/wallpapers.json?raw_json=1')
     .then(response => {
       let postObjList = response.data.data.children
       console.log(postObjList)
       let thumbnail = postObjList[0].data.preview.images[0].source.url
       console.log(thumbnail)
-      thumbnail = thumbnail.replace('amp;s', 's')
+      //thumbnail = thumbnail.replace('amp;s', 's')
       //document.getElementById("test").src = thumbnail
       jquery('#test').attr('src', thumbnail)
     })
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 h3 {
   margin: 40px 0 0;
 }
@@ -49,4 +49,16 @@ li {
 a {
   color: #42b983;
 }
+
+img {
+
+  height: 30%;
+  width: 30%;
+  border-radius: .5em;
+  box-shadow: 
+    -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    8px 8px 12px 0 rgba(0,0,0,.3);
+  
+}
+
 </style>
