@@ -2,32 +2,15 @@
 <div class="container-fluid">
   <ul class="gallery justify-content-center list-group-flush">
     <li class="mb-3 pics" v-for="post in postObjList" v-bind:key="post.data.id">
-      <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
+      <div class="card">
+        <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
+        <div class="content-overlay"></div>
+        <div class="content">
+          <p>U/{{ post.data.author }}</p>
+        </div>
+      </div>
+      
     </li>
-    <!-- <li class="mb-3 pics ">
-      <img class="img-fluid" id="thumbnail2" src="" alt="">
-    </li>
-    <li class="mb-3 pics ">
-      <img class="img-fluid" id="thumbnail3" src="" alt="">
-    </li>
-    <li class="mb-3 pics ">
-      <img class="img-fluid" id="thumbnail4" src="" alt="">
-    </li>
-    <li class="mb-3 pics ">
-      <img class="img-fluid" id="thumbnail5" src="" alt="">
-    </li>
-    <li class="mb-3 pics ">
-      <img class="img-fluid" id="thumbnail6" src="" alt="">
-    </li>
-    <li class="mb-3 pics ">
-      <img class="img-fluid" id="thumbnail7" src="" alt="">
-    </li>
-    <li class="mb-3 pics ">
-      <img class="img-fluid" id="thumbnail8" src="" alt="">
-    </li>
-    <li class="mb-3 pics ">
-      <img class="img-fluid" id="thumbnail9" src="" alt="">
-    </li> -->
   </ul>
 </div>
   
@@ -38,6 +21,7 @@
 <script>
   import 'bootstrap'
   import 'bootstrap/dist/css/bootstrap.min.css'
+
 
   const axios = require('axios')
   //const jquery = require('jquery')
@@ -56,42 +40,12 @@
     },
 
     created() {
-
-      // var posts = {
-      //   thumbnails: [],
-      //   titles: [],
-      //   link: []
-      // }
-
       axios.get(baseURL)
         .then(response => {
 
           this.postObjList = response.data.data.children
           console.log(this.postObjList)
 
-
-
-          // postObjList.forEach(element => {
-          //   posts.thumbnails.push(element.data.preview.images[0].source.url.replace('amp;s', 's'))
-          //   posts.titles.push(element.data.title)
-          //   posts.link.push(element.data.url)
-          // });
-
-          // console.log(posts)
-          // document.getElementById('thumbnail1').src = posts.thumbnails[0];
-          // document.getElementById('thumbnail2').src = posts.thumbnails[1];
-          // document.getElementById('thumbnail3').src = posts.thumbnails[2];
-          // document.getElementById('thumbnail4').src = posts.thumbnails[3];
-          // document.getElementById('thumbnail5').src = posts.thumbnails[4];
-          // document.getElementById('thumbnail6').src = posts.thumbnails[5];
-          // document.getElementById('thumbnail7').src = posts.thumbnails[6];
-          // document.getElementById('thumbnail8').src = posts.thumbnails[7];
-          // document.getElementById('thumbnail9').src = posts.thumbnails[8];
-          
-          
-          //let posts = thumbnails.replace('amp;s', 's')
-          //document.getElementById("thumbnail").src = posts
-          //jquery('#test').attr('src', thumbnail)
         })
 
     }
@@ -110,31 +64,22 @@
     padding: 5px;
   }
 
-  a {
-    color: #42b983;
-  }
 
   img {
     //padding: .2em;
     height: auto;
     width: 100%;
-    //border-radius: .5em;
+    border-radius: .5em;
     //display: block;
-    transition: .3s ease-in-out;
   }
 
-// .container-fluid {
-//   background-color:rgba(253, 253, 253, 0.239)
-// }
-
+  //for the hover effect
+  //https://codepen.io/ArnaudBalland/pen/vGZKLr?editors=1100
 
   .gallery {
   column-count: 3;
   column-width: 33%;
   }
-
- 
-
 
   @media (max-width: 700px) {
   .gallery {
@@ -152,14 +97,71 @@
     column-width: 100%;}
   }
 
+  .card {
+    border-radius: .5em;
+  }
 
-  .gallery .pics :hover {
+  .pics .card:hover {
     // margin: 2px;
     // padding: 2px;
     //transform: scale(1.05);
+    cursor: zoom-in;
     box-shadow: 
       -7px 7px 12px rgba(255,255,255,.3),
-      7px 7px 12px rgba(0, 0, 0, .3)
+      7px 7px 12px rgba(0, 0, 0, .3);
+    
+  }
+
+  .card .content-overlay {
+    border-radius: .5em;
+    background: rgba(0,0,0,0.5);
+    position: absolute;
+    align-content: right;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    -webkit-transition: all 0.4s ease-in-out 0s;
+    -moz-transition: all 0.4s ease-in-out 0s;
+    transition: all 0.4s ease-in-out 0s;
+  }
+
+  .card:hover img {
+    filter: blur(2px);
+  }
+
+  .card:hover .content-overlay{
+    opacity: 1;
+  }
+
+  .card .content {
+    font-size: x-small;
+    color: white;
+    letter-spacing: 0.25rem;
+    position: absolute;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 100%;
+    top: 80%;
+    left: 50%;
+    opacity: 0;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    -moz-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+  }
+
+
+  .card:hover .content {
+    top: 50%;
+    left: 50%;
+    opacity: 1;
   }
 
   
