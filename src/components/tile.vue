@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <ul class="gallery justify-content-center list-group-flush">
       <li class="mb-1 pics" v-for="post in postObjList" v-bind:key="post.data.id">
-        <div class="card">
+        <div class="card" v-if="post.data.preview">
           <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
           <div class="content-overlay"></div>
           <div class="content">
@@ -25,16 +25,10 @@
   import 'bootstrap'
   import 'bootstrap/dist/css/bootstrap.min.css'
 
-  import 'uikit'
-  import 'uikit/dist/css/uikit.min.css'
-  import 'uikit/dist/js/uikit.min.js'
+
 
   const axios = require('axios')
-  const jquery = require('jquery')
 
-  jquery('.card').on('click', function () {
-    jquery('#myModal').modal('show');
-  })
 
   const baseURL = "https://www.reddit.com/r/wallpapers.json"
   export default {
