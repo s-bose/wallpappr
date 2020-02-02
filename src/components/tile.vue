@@ -1,20 +1,22 @@
 <template>
-<div class="container-fluid">
-  <ul class="gallery justify-content-center list-group-flush">
-    <li class="mb-3 pics" v-for="post in postObjList" v-bind:key="post.data.id">
-      <div class="card">
-        <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
-        <div class="content-overlay"></div>
-        <div class="content">
-          <p>U/{{ post.data.author }}</p>
-          <a target="_blank" v-bind:href=" 'http://www.reddit.com' +post.data.permalink"><i class="fas fa-globe fa-lg" style="color: white;"></i></a>
+  <div class="container-fluid">
+    <ul class="gallery justify-content-center list-group-flush">
+      <li class="mb-1 pics" v-for="post in postObjList" v-bind:key="post.data.id">
+        <div class="card">
+          <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
+          <div class="content-overlay"></div>
+          <div class="content">
+            <p>U/{{ post.data.author }}</p>
+            <a target="_blank" v-bind:href=" 'http://www.reddit.com' +post.data.permalink"><i class="fas fa-globe fa-lg"
+                style="color: white;"></i></a>
+          </div>
         </div>
-      </div>
-      <hr class="my-2 style2">
-    </li>
-  </ul>
-</div>
-  
+        <hr class="my-2 style2">
+      </li>
+    </ul>
+
+  </div>
+
 
 
 </template>
@@ -23,9 +25,16 @@
   import 'bootstrap'
   import 'bootstrap/dist/css/bootstrap.min.css'
 
-  const axios = require('axios')
-  //const jquery = require('jquery')
+  import 'uikit'
+  import 'uikit/dist/css/uikit.min.css'
+  import 'uikit/dist/js/uikit.min.js'
 
+  const axios = require('axios')
+  const jquery = require('jquery')
+
+  jquery('.card').on('click', function () {
+    jquery('#myModal').modal('show');
+  })
 
   const baseURL = "https://www.reddit.com/r/wallpapers.json"
   export default {
@@ -35,10 +44,13 @@
     },
     data() {
       return {
+        showModal: false,
         postObjList: []
       }
     },
+    components: {
 
+    },
     created() {
       axios.get(baseURL)
         .then(response => {
@@ -52,131 +64,139 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
-* {
-  font-family: 'Quicksand';
-}
+  @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  .gallery {
+    padding-left: 15%;
+    padding-right: 15%;
+  }
 
-li {
-  display: inline-block;
-  padding: 5px;
-}
+  * {
+    font-family: 'Quicksand';
+  }
 
-hr.style2{
-  border: 0;
-  height: 1px;
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
-}
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
-img {
-  //padding: .2em;
-  height: auto;
-  width: 100%;
-  //border-radius: .5em;
-  //display: block;
-}
+  li {
+    display: inline-block;
+    padding: 5px;
+  }
 
-//for the hover effect
-//https://codepen.io/ArnaudBalland/pen/vGZKLr?editors=1100
+  hr.style2 {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+  }
 
-.gallery {
-column-count: 3;
-column-width: 33%;
-}
+  img {
+    //padding: .2em;
+    height: auto;
+    width: 100%;
+    //border-radius: .5em;
+    //display: block;
+  }
 
-@media (max-width: 700px) {
-.gallery {
-  -webkit-column-count: 2;
-  -moz-column-count: 2;
-  column-count: 2;
-  column-width: 50%;}
-}
+  //for the hover effect
+  //https://codepen.io/ArnaudBalland/pen/vGZKLr?editors=1100
 
-@media (max-width: 450px) {
-.gallery {
-  -webkit-column-count: 1;
-  -moz-column-count: 1;
-  column-count: 1;
-  column-width: 100%;}
-}
+  .gallery {
+    column-count: 3;
+    column-width: 33.3333333%;
+  }
 
-.card {
-  //border-radius: .5em;
-}
+  @media (max-width: 900px) {
+    .gallery {
+      -webkit-column-count: 2;
+      -moz-column-count: 2;
+      column-count: 2;
+      column-width: 50%;
+    }
+  }
 
-hr.style2 {
-  //display: none;
-  opacity: 0;
-}
+  @media (max-width: 650px) {
+    .gallery {
+      -webkit-column-count: 1;
+      -moz-column-count: 1;
+      column-count: 1;
+      column-width: 100%;
+    }
+  }
 
-.pics .card:hover {
-  // margin: 2px;
-  // padding: 2px;
-  //transform: scale(1.05);
-  cursor: zoom-in;
-  box-shadow: 
-    -7px 7px 12px rgba(255,255,255,.3),
-    7px 7px 12px rgba(0, 0, 0, .3);
-  
-}
+  .card {
+    //border-radius: .5em;
+    
+  }
 
-.card .content-overlay {
-  //border-radius: .4em;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
-  position: absolute;
-  align-content: right;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  opacity: 0;
-  -webkit-transition: all 0.4s ease-in-out 0s;
-  -moz-transition: all 0.4s ease-in-out 0s;
-  transition: all 0.4s ease-in-out 0s;
-}
+  hr.style2 {
+    //display: none;
+    opacity: 0;
+  }
 
-.card:hover img {
-  filter: blur(2px);
-}
+  .pics .card:hover {
+    // margin: 2px;
+    // padding: 2px;
+    //transform: scale(1.05);
+    cursor: zoom-in;
+    box-shadow:
+      -7px 7px 12px rgba(255, 255, 255, .3),
+      7px 7px 12px rgba(0, 0, 0, .3);
 
-.card:hover .content-overlay{
-  opacity: 1;
-}
+  }
 
+  .card .content-overlay {
+    //border-radius: .4em;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
+    position: absolute;
+    align-content: right;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    -webkit-transition: all 0.4s ease-in-out 0s;
+    -moz-transition: all 0.4s ease-in-out 0s;
+    transition: all 0.4s ease-in-out 0s;
+  }
 
+  .card:hover img {
+    filter: blur(2px);
+  }
 
-.card .content {
-  font-size: x-small;
-  color: white;
-  letter-spacing: 0.25rem;
-  position: absolute;
-  text-align: center;
-  padding-left: 1em;
-  padding-right: 1em;
-  width: 100%;
-  top: 80%;
-  left: 50%;
-  opacity: 0;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  -webkit-transition: all 0.3s ease-in-out 0s;
-  -moz-transition: all 0.3s ease-in-out 0s;
-  transition: all 0.3s ease-in-out 0s;
-}
+  .card:hover .content-overlay {
+    opacity: 1;
+  }
 
 
-.card:hover .content {
-  top: 50%;
-  left: 50%;
-  opacity: 1;
-}
 
+  .card .content {
+    font-size: x-small;
+    color: white;
+    letter-spacing: 0.25rem;
+    position: absolute;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 100%;
+    top: 80%;
+    left: 50%;
+    opacity: 0;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    -moz-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+  }
+
+
+  .card:hover .content {
+    top: 50%;
+    left: 50%;
+    opacity: 1;
+  }
 </style>

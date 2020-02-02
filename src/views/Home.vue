@@ -1,24 +1,26 @@
 <template>
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <tile msg="Welcome to Your Vue.js App"/>
+    <tile/>
+    <!-- <modalEnlarge/> -->
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import tile from '@/components/tile.vue'
-
+// import modalEnlarge from '@/components/modalEnlarge.vue'
 export default {
   name: 'home',
   components: {
-    tile
+    tile,
+    // modalEnlarge
   }
 }
 </script>
 
 <style>
 body {
-  background: #eeeeee;
+  background: #ffffff;
 }
 </style>
