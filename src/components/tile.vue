@@ -1,4 +1,5 @@
 <template>
+<!-- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores accusamus alias magni aperiam, temporibus adipisci minima quo magnam tenetur iusto eos totam mollitia aliquid omnis quam nam aut deserunt sequi. -->
   <div class="container-fluid">
     <ul class="gallery justify-content-center list-group-flush">
       <li class="mb-1 pics" v-for="post in postsWithPreview" v-bind:key="post.data.id">
