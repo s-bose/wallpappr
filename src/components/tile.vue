@@ -1,8 +1,8 @@
 <template>
   <div class="container-fluid">
     <ul class="gallery justify-content-center list-group-flush">
-      <li class="mb-1 pics" v-for="post in postObjList" v-bind:key="post.data.id">
-        <div class="card" v-if="post.data.preview">
+      <li class="mb-1 pics" v-for="post in postsWithPreview" v-bind:key="post.data.id">
+        <div class="card">
           <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
           <div class="content-overlay"></div>
           <div class="content">
@@ -50,8 +50,15 @@
         .then(response => {
           this.postObjList = response.data.data.children
           console.log(this.postObjList)
+          console.log(this.postsWithPreview)
         })
-
+    },
+    computed: {
+      postsWithPreview: function() {
+        return this.postObjList.filter(function(post) {
+          return post.data.preview
+        })
+      }
     }
   }
 </script>
