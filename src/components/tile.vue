@@ -1,35 +1,31 @@
 <template>
-<!-- Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores accusamus alias magni aperiam, temporibus adipisci minima quo magnam tenetur iusto eos totam mollitia aliquid omnis quam nam aut deserunt sequi. -->
   <div class="container-fluid">
     <ul class="gallery justify-content-center list-group-flush">
       <li class="mb-1 pics" v-for="post in postsWithPreview" v-bind:key="post.data.id">
-        <div class="card">
+        <div class="card" @click="showModal(post.data.author)">
           <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
           <div class="content-overlay"></div>
           <div class="content">
             <p>U/{{ post.data.author }}</p>
-            <a target="_blank" v-bind:href=" 'http://www.reddit.com' +post.data.permalink"><i class="fas fa-globe fa-lg"
-                style="color: white;"></i></a>
+            <span @click.stop><a target="_blank" v-bind:href=" 'http://www.reddit.com' +post.data.permalink"><i class="fas fa-globe fa-lg"
+                style="color: white;"></i></a></span>
           </div>
         </div>
         <hr class="my-2 style2">
       </li>
     </ul>
-
+    <imageModal ref="modal"></imageModal>
   </div>
-
-
-
 </template>
 
 <script>
-  import 'bootstrap'
+
   import 'bootstrap/dist/css/bootstrap.min.css'
 
-
+  import imageModal from '@/components/imageModal.vue'
 
   const axios = require('axios')
-
+  // const jquery = require('jquery')
 
   const baseURL = "https://www.reddit.com/r/wallpapers.json"
   export default {
@@ -39,12 +35,11 @@
     },
     data() {
       return {
-        showModal: false,
         postObjList: []
       }
     },
     components: {
-
+      imageModal,
     },
     created() {
       axios.get(baseURL)
@@ -59,6 +54,24 @@
         return this.postObjList.filter(function(post) {
           return post.data.preview
         })
+      }
+    },
+    methods: {
+      changeModalContent() {
+      },
+      showModal(author) {
+        // this.modalVisible = true
+        // console.log('click working')
+        // jquery('#exampleModal').modal('show')
+        // console.log(this.$refs);
+        console.log(author);
+        this.$refs.modal.open(author);
+      },
+      closeModal() {
+        // jquery(modalRef).on("hidden.bs.modal", function(){
+        // jquery('#exampleModal').html("");
+        // })
+        this.$refs.modal.close();
       }
     }
   }
