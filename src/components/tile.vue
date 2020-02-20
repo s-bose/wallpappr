@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <ul class="gallery justify-content-center list-group-flush">
       <li class="mb-1 pics" v-for="post in postsWithPreview" v-bind:key="post.data.id">
-        <div class="card" @click="showModal(post.data.author)">
+        <div class="card" @click="showModal(post)">
           <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
           <div class="content-overlay"></div>
           <div class="content">
@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script>
+<script defer>
 
   import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -28,6 +28,9 @@
   // const jquery = require('jquery')
 
   const baseURL = "https://www.reddit.com/r/wallpapers.json"
+  const limitBy = '?limit=25' //15 by default for faster loading
+
+
   export default {
     name: 'tile',
     props: {
@@ -42,7 +45,7 @@
       imageModal,
     },
     created() {
-      axios.get(baseURL)
+      axios.get(baseURL + limitBy)
         .then(response => {
           this.postObjList = response.data.data.children
           console.log(this.postObjList)
@@ -110,7 +113,7 @@
     //padding: .2em;
     height: auto;
     width: 100%;
-    //border-radius: .5em;
+    border-radius: .3em;
     //display: block;
   }
 
@@ -141,8 +144,9 @@
   }
 
   .card {
-    //border-radius: .5em;
-    
+    border-radius: .3em;
+    position: relative;
+    // overflow: auto;
   }
 
   hr.style2 {
@@ -153,7 +157,8 @@
   .pics .card:hover {
     // margin: 2px;
     // padding: 2px;
-    //transform: scale(1.05);
+    border-radius: .3em;
+    transform: scale(1.05);
     cursor: zoom-in;
     box-shadow:
       -7px 7px 12px rgba(255, 255, 255, .3),
@@ -162,7 +167,8 @@
   }
 
   .card .content-overlay {
-    //border-radius: .4em;
+    border-radius: .3em;
+    position: absolute;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
     position: absolute;
     align-content: right;
