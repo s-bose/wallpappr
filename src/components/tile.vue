@@ -3,11 +3,11 @@
     <ul class="gallery justify-content-center list-group-flush">
       <li class="mb-1 pics" v-for="post in postsWithPreview" v-bind:key="post.data.id">
         <div class="card" @click="showModal(post)">
-          <img :src="post.data.preview.images[0].source.url.replace('amp;s', 's')" class="img-fluid" alt="">
+          <img :src="post.data.preview.images[0].resolutions[2].url" class="img-fluid" alt="">
           <div class="content-overlay"></div>
           <div class="content">
             <p>U/{{ post.data.author }}</p>
-            <span @click.stop><a target="_blank" v-bind:href=" 'http://www.reddit.com' +post.data.permalink"><i class="fas fa-globe fa-lg"
+            <span @click.stop><a target="_blank" v-bind:href=" 'http://www.reddit.com' + post.data.permalink"><i class="fas fa-globe fa-lg"
                 style="color: white;"></i></a></span>
           </div>
         </div>
@@ -17,6 +17,8 @@
     <imageModal ref="modal"></imageModal>
   </div>
 </template>
+
+// https://preview.redd.it/0v22at12k9k41.png?width=320&crop=smart&amp;auto=webp&amp;s=d80c2ddca1f4d6563e18e8f4229fe21a2d5dce95
 
 <script defer>
 
@@ -38,7 +40,7 @@
     },
     data() {
       return {
-        postObjList: []
+        postsWithPreview: []
       }
     },
     components: {
@@ -47,33 +49,41 @@
     created() {
       axios.get(baseURL + limitBy)
         .then(response => {
-          this.postObjList = response.data.data.children
-          console.log(this.postObjList)
-          console.log(this.postsWithPreview)
+          
+          var postObjList = response.data.data.children
+          this.postsWithPreview = postObjList.filter(function(post) {
+            return post.data.preview
+          })
+
+          function removeAmp(url) {    // ** replacing all occurence of '&amp;' with '&'
+            const parseResult = new DOMParser().parseFromString(url, "text/html");
+            const parsedURL = parseResult.documentElement.textContent;
+            // console.log(parsedURL);
+            return parsedURL;
+          }
+          this.postsWithPreview.forEach(function(post) {
+            post.data.preview.images[0].resolutions.forEach(function(res) {
+              res.url = removeAmp(res.url);
+            })
+
+            post.data.preview.images[0].source.url = removeAmp(post.data.preview.images[0].source.url);
+          })
+          console.log(this.postsWithPreview);
         })
     },
     computed: {
-      postsWithPreview: function() {
-        return this.postObjList.filter(function(post) {
-          return post.data.preview
-        })
-      }
+
     },
     methods: {
+      
       changeModalContent() {
       },
-      showModal(author) {
-        // this.modalVisible = true
-        // console.log('click working')
-        // jquery('#exampleModal').modal('show')
-        // console.log(this.$refs);
-        console.log(author);
-        this.$refs.modal.open(author);
+      showModal(post) {
+
+        console.log(post);
+        this.$refs.modal.open(post);
       },
       closeModal() {
-        // jquery(modalRef).on("hidden.bs.modal", function(){
-        // jquery('#exampleModal').html("");
-        // })
         this.$refs.modal.close();
       }
     }
@@ -110,15 +120,15 @@
   }
 
   img {
-    //padding: .2em;
+    padding: .1em;
     height: auto;
     width: 100%;
-    border-radius: .3em;
+    //border-radius: .3em;
     //display: block;
   }
 
-  //for the hover effect
-  //https://codepen.io/ArnaudBalland/pen/vGZKLr?editors=1100
+  // ? for the hover effect
+  // ? https://codepen.io/ArnaudBalland/pen/vGZKLr?editors=1100
 
   .gallery {
     column-count: 3;
@@ -144,9 +154,12 @@
   }
 
   .card {
-    border-radius: .3em;
+    // border-radius: .3em;
     position: relative;
     // overflow: auto;
+    box-shadow:
+      -7px 7px 12px rgba(255, 255, 255, .5),
+      7px 7px 12px rgba(0, 0, 0, .3);
   }
 
   hr.style2 {
@@ -157,8 +170,9 @@
   .pics .card:hover {
     // margin: 2px;
     // padding: 2px;
-    border-radius: .3em;
-    transform: scale(1.05);
+    // border-radius: .3em;
+    filter: grayscale(70%);
+    transform: scale(1.1);
     cursor: zoom-in;
     box-shadow:
       -7px 7px 12px rgba(255, 255, 255, .3),
@@ -167,7 +181,7 @@
   }
 
   .card .content-overlay {
-    border-radius: .3em;
+    // border-radius: .3em;
     position: absolute;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
     position: absolute;
