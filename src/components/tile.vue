@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <ul class="gallery justify-content-center list-group-flush">
       <li class="mb-1 pics" v-for="post in postsWithPreview" v-bind:key="post.data.id">
-        <div class="card" @click="showModal(post)">
+        <div class="card" @click="showLightbox(post.data.preview)">
           <img :src="post.data.preview.images[0].resolutions[2].url" class="img-fluid" alt="">
           <div class="content-overlay"></div>
           <div class="content">
@@ -14,17 +14,18 @@
         <hr class="my-2 style2">
       </li>
     </ul>
-    <imageModal ref="modal"></imageModal>
+    <div class="lightbox">
+      <img src="" alt="">
+    </div>
   </div>
 </template>
 
-// https://preview.redd.it/0v22at12k9k41.png?width=320&crop=smart&amp;auto=webp&amp;s=d80c2ddca1f4d6563e18e8f4229fe21a2d5dce95
 
 <script defer>
 
-  import 'bootstrap/dist/css/bootstrap.min.css'
+  // import 'bootstrap/dist/css/bootstrap.min.css'
 
-  import imageModal from '@/components/imageModal.vue'
+
 
   const axios = require('axios')
   // const jquery = require('jquery')
@@ -44,7 +45,7 @@
       }
     },
     components: {
-      imageModal,
+
     },
     created() {
       axios.get(baseURL + limitBy)
@@ -75,16 +76,25 @@
 
     },
     methods: {
-      
-      changeModalContent() {
-      },
-      showModal(post) {
+      showLightbox(previewList) {
+        var lightbox = document.querySelector('.lightbox')
+        lightbox.classList.add('active')
+        console.log(previewList)
+        var image = lightbox.getElementsByTagName('img')[0]
+        console.log(image)
 
-        console.log(post);
-        this.$refs.modal.open(post);
-      },
-      closeModal() {
-        this.$refs.modal.close();
+        var imageSrcs = previewList.images[0]
+        image.src = imageSrcs.source.url
+
+        while (lightbox.firstChild) {
+          lightbox.removeChild(lightbox.firstChild)
+        }
+        lightbox.appendChild(image)
+
+        lightbox.addEventListener('click', e => {
+          if (e.target !== e.currentTarget) return
+            lightbox.classList.remove('active')
+          })
       }
     }
   }
@@ -93,6 +103,10 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
+  .container-fluid {
+    padding: 0px !important;
+  }
 
   .gallery {
     padding-left: 15%;
@@ -127,6 +141,44 @@
     //display: block;
   }
 
+
+  .lightbox {
+    position: fixed;
+    // overflow: hidden;
+    z-index: 999;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .4s linear;
+  }
+
+  .lightbox.active {
+    // display: flex;
+    // transition: .4s ease-in-out;
+    // overflow: hidden;
+    opacity: 1;
+    visibility: visible;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+
+  .lightbox img {
+    max-width: 100vh;
+    max-height: 100vh;
+    width: auto;
+    height: auto;
+    // width: 80%;
+    // height: 70%;
+    padding: 2em;
+
+  }
+
   // ? for the hover effect
   // ? https://codepen.io/ArnaudBalland/pen/vGZKLr?editors=1100
 
@@ -135,7 +187,7 @@
     column-width: 33.3333333%;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 970px) {
     .gallery {
       -webkit-column-count: 2;
       -moz-column-count: 2;
