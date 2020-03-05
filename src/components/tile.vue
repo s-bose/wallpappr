@@ -18,11 +18,14 @@
       <div>
         <img src="" alt="">
         <div class="figcaption">
-          <a target="_blank" href=""><h6></h6></a>
+          <div id="info">
+            <a target="_blank" href=""></a>
+            <p>hello world</p>
+          </div>
           <div class="icons">
-            <span><a href="#"><i class="fa fa-heart-o"></i></a></span>
-            <span><a href="#"><i class="fa fa-arrow-down"></i></a></span>
-            <span><a href="#"><i class="fa fa-paint-roller"></i></a></span>
+            <a href="#"><i class="fa fa-heart-o"></i></a>
+            <a href="#"><i class="fa fa-arrow-down"></i></a>
+            <a href="#"><i class="fa fa-paint-roller"></i></a>
           </div>
         </div>
       </div>
@@ -97,10 +100,10 @@ export default {
 
       image.onload = function () {
         lightbox.classList.add('active')
-        // lightbox.getElementsByClassName('figcaption')[0].style.width = image.width + 'px'
-        lightbox.querySelector('.figcaption > a > h6').textContent = post.data.title
-        lightbox.querySelector('.figcaption > a').href = "http://reddit.com" + post.data.permalink
-        // lightbox.querySelector('')
+        var info = document.getElementById('info').childNodes
+        info[0].textContent = post.data.title
+        info[0].href = "http://reddit.com" + post.data.permalink
+        info[1].textContent = 'u/' + post.data.author
       }
 
 
@@ -154,6 +157,13 @@ img {
   //display: block;
 }
 
+#info {
+  flex-direction: column;
+}
+
+#info>p {
+  font-size: .7em;
+}
 
 .lightbox {
   position: fixed;
@@ -162,7 +172,7 @@ img {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
   display: none;
   // opacity: 1;
   // visibility: visible;
@@ -183,15 +193,16 @@ img {
 
 .lightbox>div {
   height: auto;
-  width: auto;
+  // width: auto;
   display: flex;
   flex-direction: column;
-  // width:  33vw;
+  width: 50%;
   justify-content: center;
 }
 
 .lightbox>div .figcaption {
-  font-size: max(1.5vw, 10px);
+  width: 100%;
+  // font-size: max(1.5em, 10px);
   display: flex;
   text-align: left;
   justify-content: space-between;
@@ -200,32 +211,48 @@ img {
 }
 
 
-.lightbox>div .figcaption span {
+.lightbox>div .figcaption .icons {
+  display: flex;
+}
+
+.lightbox>div .figcaption .icons a {
+  font-size: .7em;
   // position: relative;
   padding-left: 2em;
   color: white;
 }
 
-.lightbox>div .figcaption a {
+
+#info a {
   color: white;
+  font-size: .8em;
 }
 
-.lightbox>div .figcaption span>a:hover {
+#info p {
+  font-size: .7em;
+}
+
+// .lightbox>div .figcaption a {
+  
+// }
+
+.lightbox>div .figcaption .icons a:hover {
   color: red;
 }
 
 
 .lightbox img {
   // display: grid;
-  max-width: 100vh;
-  max-height: 100vh;
+  max-width: 100%;
+  max-height: 100%;
   width: auto;
   height: auto;
-  // width: 80%;
-  // height: 70%;
-  padding: .3em;
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid white;
+  box-shadow: 0px 0px 100px 3px rgba(0,0,0,1);
+  margin: 0;
+  padding: 0;
+  // padding: .3em;
+  // background-color: rgba(0, 0, 0, 0.2);
+  // border: 1px solid white;
 }
 
 // ? for the hover effect
