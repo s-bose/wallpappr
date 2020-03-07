@@ -41,8 +41,8 @@
 
 const axios = require('axios')
 // const fs = require('fs')
-const baseURL = "https://www.reddit.com/r/wallpapers.json"
-const limitBy = '?limit=25' //15 by default for faster loading
+
+
 
 
 export default {
@@ -52,20 +52,42 @@ export default {
   },
   data() {
     return {
-      postsWithPreview: []
+      postsWithPreview: [],
+      postsLoading: false,
+      next: null,
     }
   },
   components: {
 
   },
   created() {
-    axios.get(baseURL + limitBy)
-      .then(response => {
+
+    this.getPosts()
+
+    window.addEventListener('scroll', this.handleScroll)
+     
+  },
+
+  methods: {
+
+    getPosts(page) {
+      const baseURL = "https://www.reddit.com/r/wallpapers.json?limit=25&count=25"
+
+      var url = baseURL
+      if (page != null) {
+        url = baseURL + '&after=' + page
+      }
+
+      axios.get(url)
+         .then(response => {
 
         var postObjList = response.data.data.children
-        this.postsWithPreview = postObjList.filter(function (post) {
-          return post.data.preview
-        })
+        this.next = response.data.data.after
+        this.postsLoading = false
+        this.postsWithPreview = this.postsWithPreview.concat(postObjList.filter(function (post) {
+           return post.data.preview 
+           }))
+
 
         function removeAmp(url) { // ** replacing all occurence of '&amp;' with '&'
           const parseResult = new DOMParser().parseFromString(url, "text/html");
@@ -81,12 +103,28 @@ export default {
           post.data.preview.images[0].source.url = removeAmp(post.data.preview.images[0].source.url);
         })
         console.log(this.postsWithPreview);
-      })
-  },
-  computed: {
 
-  },
-  methods: {
+
+
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+    },
+
+    handleScroll() {
+      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+      if (bottomOfWindow) {
+        console.log("End reached")
+        if (this.next != null) {
+          this.getPosts(this.next)
+        }
+      }
+      
+    },
+
+
     showLightbox(post) {
       var previewList = post.data.preview
       var lightbox = document.querySelector('.lightbox')
@@ -129,6 +167,10 @@ export default {
   padding-right: 15%;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 * {
   font-family: 'Quicksand';
 }
@@ -167,7 +209,7 @@ img {
 
 .lightbox {
   position: fixed;
-  // overflow: hidden;
+  
   z-index: 999;
   top: 0;
   width: 100%;
@@ -180,10 +222,11 @@ img {
 }
 
 .lightbox.active {
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   // transition: .4s ease-in-out;
-  overflow: hidden;
+  // overflow: hidden;
   // opacity: 1;
   // visibility: visible;
   justify-content: center;
@@ -192,12 +235,16 @@ img {
 
 
 .lightbox>div {
+  position: absolute;
   height: auto;
   // width: auto;
+
   display: flex;
   flex-direction: column;
   width: 50%;
   justify-content: center;
+  top: 10%;
+  padding-bottom: 2%;
 }
 
 .lightbox>div .figcaption {
