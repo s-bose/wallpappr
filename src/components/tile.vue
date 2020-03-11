@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <ul class="gallery justify-content-center list-group-flush">
-      <li class="mb-1 pics" v-for="post in postsWithPreview" v-bind:key="post.data.id">
+    <ul class="justify-content-center d-flex flex-wrap">
+      <li class="mb-1 pics" v-for="post in postsWithPreview" :key="post.data.id">
         <div class="card" @click="showLightbox(post)">
           <img :src="post.data.preview.images[0].resolutions[2].url" class="img-fluid" alt="">
           <div class="content-overlay"></div>
@@ -20,7 +20,7 @@
         <div class="figcaption">
           <div id="info">
             <a target="_blank" href=""></a>
-            <p>hello world</p>
+            <p></p>
           </div>
           <div class="icons">
             <a href="#"><i class="fa fa-heart-o"></i></a>
@@ -35,9 +35,6 @@
 
 
 <script defer>
-
-  // import 'bootstrap/dist/css/bootstrap.min.css'
-
 
 const axios = require('axios')
 // const fs = require('fs')
@@ -82,11 +79,13 @@ export default {
          .then(response => {
 
         var postObjList = response.data.data.children
+        postObjList = postObjList.filter(function (post) {
+           return post.data.preview 
+           })
         this.next = response.data.data.after
         this.postsLoading = false
-        this.postsWithPreview = this.postsWithPreview.concat(postObjList.filter(function (post) {
-           return post.data.preview 
-           }))
+        
+        this.postsWithPreview = this.postsWithPreview.concat(postObjList)
 
 
         function removeAmp(url) { // ** replacing all occurence of '&amp;' with '&'
@@ -156,15 +155,17 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+<style scoped lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
 
 .container-fluid {
   padding: 0px !important;
 }
 
 .gallery {
-  padding-left: 15%;
-  padding-right: 15%;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
 ::-webkit-scrollbar {
@@ -181,6 +182,7 @@ ul {
 }
 
 li {
+
   display: inline-block;
   padding: 5px;
 }
@@ -191,21 +193,101 @@ hr.style2 {
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
 }
 
-img {
-  padding: .1em;
-  height: auto;
+
+
+/* CARD #####################################################################*/
+
+.card {
+  height: 25vh;
+  width: 25vw;
+  // border-radius: .3em;
+  position: relative;
+  // overflow: auto;
+  margin-left: .5em;
+  margin-left: .5em;
+
+  box-shadow:
+    -7px 7px 12px rgba(255, 255, 255, .5),
+    7px 7px 12px rgba(0, 0, 0, .3);
+}
+
+hr.style2 {
+  //display: none;
+  opacity: 0;
+}
+
+ .card:hover {
+  // margin: 2px;
+  // padding: 2px;
+  // border-radius: .3em;
+  filter: grayscale(70%);
+  // transform: scale(1.1);
+  cursor: zoom-in;
+  box-shadow:
+    -7px 7px 12px rgba(255, 255, 255, .3),
+    7px 7px 12px rgba(0, 0, 0, .3);
+
+}
+
+.card .content-overlay {
+  border-radius: .3em;
+  position: absolute;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
+  position: absolute;
+  align-content: right;
+  height: 100%;
   width: 100%;
-  //border-radius: .3em;
-  //display: block;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 0.4s ease-in-out 0s;
 }
 
-#info {
-  flex-direction: column;
+.card:hover img {
+  filter: blur(2px);
 }
 
-#info>p {
-  font-size: .7em;
+.card:hover .content-overlay {
+  opacity: 1;
 }
+
+.card img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: .3em;
+}
+
+.card .content {
+  font-size: x-small;
+  color: white;
+  letter-spacing: 0.25rem;
+  position: absolute;
+  text-align: center;
+  padding-left: 1em;
+  padding-right: 1em;
+  width: 100%;
+  top: 80%;
+  left: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease-in-out 0s;
+}
+
+
+.card:hover .content {
+  top: 50%;
+  left: 50%;
+  opacity: 1;
+}
+
+
+/* CARD #####################################################################*/
+
+
+/* LIGHTBOX ################################################################*/
 
 .lightbox {
   position: fixed;
@@ -216,19 +298,12 @@ img {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   display: none;
-  // opacity: 1;
-  // visibility: visible;
-  // transition: all .4s linear;
 }
 
 .lightbox.active {
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
-  // transition: .4s ease-in-out;
-  // overflow: hidden;
-  // opacity: 1;
-  // visibility: visible;
   justify-content: center;
   align-items: center;
 }
@@ -269,6 +344,9 @@ img {
   color: white;
 }
 
+#info {
+  flex-direction: column;
+}
 
 #info a {
   color: white;
@@ -278,10 +356,6 @@ img {
 #info p {
   font-size: .7em;
 }
-
-// .lightbox>div .figcaption a {
-  
-// }
 
 .lightbox>div .figcaption .icons a:hover {
   color: red;
@@ -302,112 +376,12 @@ img {
   // border: 1px solid white;
 }
 
+/* LIGHTBOX ################################################################*/
+
 // ? for the hover effect
 // ? https://codepen.io/ArnaudBalland/pen/vGZKLr?editors=1100
 
-.gallery {
-  column-count: 3;
-  column-width: 33.3333333%;
-}
-
-@media (max-width: 970px) {
-  .gallery {
-    -webkit-column-count: 2;
-    -moz-column-count: 2;
-    column-count: 2;
-    column-width: 50%;
-  }
-}
-
-@media (max-width: 650px) {
-  .gallery {
-    -webkit-column-count: 1;
-    -moz-column-count: 1;
-    column-count: 1;
-    column-width: 100%;
-  }
-}
-
-.card {
-  // border-radius: .3em;
-  position: relative;
-  // overflow: auto;
-  box-shadow:
-    -7px 7px 12px rgba(255, 255, 255, .5),
-    7px 7px 12px rgba(0, 0, 0, .3);
-}
-
-hr.style2 {
-  //display: none;
-  opacity: 0;
-}
-
-.pics .card:hover {
-  // margin: 2px;
-  // padding: 2px;
-  // border-radius: .3em;
-  filter: grayscale(70%);
-  transform: scale(1.1);
-  cursor: zoom-in;
-  box-shadow:
-    -7px 7px 12px rgba(255, 255, 255, .3),
-    7px 7px 12px rgba(0, 0, 0, .3);
-
-}
-
-.card .content-overlay {
-  // border-radius: .3em;
-  position: absolute;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
-  position: absolute;
-  align-content: right;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  opacity: 0;
-  -webkit-transition: all 0.4s ease-in-out 0s;
-  -moz-transition: all 0.4s ease-in-out 0s;
-  transition: all 0.4s ease-in-out 0s;
-}
-
-.card:hover img {
-  filter: blur(2px);
-}
-
-.card:hover .content-overlay {
-  opacity: 1;
-}
 
 
-
-.card .content {
-  font-size: x-small;
-  color: white;
-  letter-spacing: 0.25rem;
-  position: absolute;
-  text-align: center;
-  padding-left: 1em;
-  padding-right: 1em;
-  width: 100%;
-  top: 80%;
-  left: 50%;
-  opacity: 0;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  -webkit-transition: all 0.3s ease-in-out 0s;
-  -moz-transition: all 0.3s ease-in-out 0s;
-  transition: all 0.3s ease-in-out 0s;
-}
-
-
-.card:hover .content {
-  top: 50%;
-  left: 50%;
-  opacity: 1;
-}
 
 </style>
