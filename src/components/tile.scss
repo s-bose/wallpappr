@@ -1,0 +1,228 @@
+
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
+
+.container-fluid {
+  padding: 0px !important;
+}
+
+.gallery {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+  font-family: 'Quicksand';
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+
+  display: inline-block;
+  padding: 5px;
+}
+
+hr.style2 {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+}
+
+
+
+/* CARD #####################################################################*/
+
+.card {
+  height: 25vh;
+  width: 25vw;
+  /* border-radius: .3em; */
+  position: relative;
+  /* overflow: auto; */
+  margin-left: .5em;
+  margin-left: .5em;
+
+  box-shadow:
+    -7px 7px 12px rgba(255, 255, 255, .5),
+    7px 7px 12px rgba(0, 0, 0, .3);
+}
+
+hr.style2 {
+  /* display: none; */
+  opacity: 0;
+}
+
+ .card:hover {
+  /* margin: 2px; */
+  /* padding: 2px; */
+  /* border-radius: .3em; */
+  filter: grayscale(80%);
+  /* transform: scale(1.1); */
+  cursor: zoom-in;
+  box-shadow:
+    -7px 7px 12px rgba(255, 255, 255, .3),
+    7px 7px 12px rgba(0, 0, 0, .3);
+
+}
+
+.card .content-overlay {
+  border-radius: .3em;
+  position: absolute;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6));
+  position: absolute;
+  align-content: right;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 0.2s ease-in-out 0s;
+}
+
+.card:hover img {
+  filter: blur(2px);
+}
+
+.card:hover .content-overlay {
+  opacity: 1;
+}
+
+.card img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: .3em;
+}
+
+.card .content {
+  font-size: x-small;
+  color: white;
+  letter-spacing: 0.25rem;
+  position: absolute;
+  text-align: center;
+  padding-left: 1em;
+  padding-right: 1em;
+  width: 100%;
+  top: 80%;
+  left: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease-in-out 0s;
+}
+
+
+.card:hover .content {
+  top: 50%;
+  left: 50%;
+  opacity: 1;
+}
+
+
+/* CARD #####################################################################*/
+
+
+/* LIGHTBOX ################################################################*/
+
+.lightbox {
+  position: fixed;
+  
+  z-index: 999;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: none;
+}
+
+.lightbox.active {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.lightbox>div {
+  position: absolute;
+  height: auto;
+  /*  width: auto; */
+
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  justify-content: center;
+  top: 10%;
+  padding-bottom: 2%;
+}
+
+.lightbox>div .figcaption {
+  width: 100%;
+  /*  font-size: max(1.5em, 10px); */
+  display: flex;
+  text-align: left;
+  justify-content: space-between;
+  color: white;
+  padding-top: 1em;
+}
+
+
+.lightbox>div .figcaption .icons {
+  display: flex;
+}
+
+.lightbox>div .figcaption .icons a {
+  font-size: .7em;
+  /*  position: relative; */
+  padding-left: 2em;
+  color: white;
+}
+
+#info {
+  flex-direction: column;
+}
+
+#info a {
+  color: white;
+  font-size: .8em;
+}
+
+#info p {
+  font-size: .7em;
+}
+
+.lightbox>div .figcaption .icons a:hover {
+  color: red;
+}
+
+
+.lightbox img {
+  /*  display: grid; */
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  box-shadow: 0px 0px 100px 3px rgba(0,0,0,1);
+  margin: 0;
+  padding: 0;
+  /*  padding: .3em; */
+  /*  background-color: rgba(0, 0, 0, 0.2); */
+  /*  border: 1px solid white; */
+}
+
+/* LIGHTBOX ################################################################*/
+
+/*  ? for the hover effect */
+/*  ? https://codepen.io/ArnaudBalland/pen/vGZKLr?editors=1100 */
+
+
+
