@@ -1,6 +1,5 @@
 'use strict'
-import axios from 'axios'
-import fs from 'fs'
+
 const {download} = require('electron-dl')
 import { app, protocol, BrowserWindow, shell, ipcMain } from 'electron'
 import {
@@ -88,25 +87,7 @@ app.on('ready', async () => {
   createWindow()
 
   ipcMain.on('download', async (event, info) => {
-    // console.log(app.getPath('desktop'))
-    // console.log(app.getPath('documents'))
-    // console.log(app.getPath('downloads'))
 
-    // fs.mkdir('images/', {recursive: true}, (err) => {
-    //   if (err) throw(err)
-    // })
-    // const Path = path.resolve('images/',  `${title}.jpg`)
-    // const path = Path.toString()
-    
-    // const writer = fs.createWriteStream("demo.jpg")
-
-    // axios.get(URL, { 
-    //   // method: 'GET',
-    //   responseType: 'stream'
-    // })
-    // .then((response) => {
-    //   response.data.pipe(writer)
-    // })
     download(BrowserWindow.getFocusedWindow(), info.url, {directory: app.getPath('downloads'), 
                                                           openFolderWhenDone: true,
                                                           })

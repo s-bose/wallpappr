@@ -24,8 +24,8 @@
           </div>
           <div class="icons">
             <a href="#"><i class="fa fa-heart-o"></i></a>
-            <a href="#" @click.prevent="saveOptions"><i class="fa fa-arrow-down"></i></a>
-            <a href="#"><i class="fa fa-paint-roller"></i></a>
+            <a href="#" @click.prevent="saveWallpaper"><i class="fa fa-arrow-down"></i></a>
+            <a href="#" @click.prevent="setWallpaper"><i class="fa fa-paint-roller"></i></a>
           </div>
         </div>
       </div>
@@ -37,11 +37,9 @@
 <script defer>
 
 import axios from 'axios'
+import { ipcRenderer } from 'electron'
+const wallpaper = require('wallpaper')
 
-// const { remote } = require('electron')
-// const { dialog } = remote 
-// const path = require('path')
-import {ipcRenderer} from 'electron'
 
 export default {
   name: 'tile',
@@ -70,7 +68,7 @@ export default {
   methods: {
 
     getPosts(page) {
-      const baseURL = "https://www.reddit.com/r/wallpapers.json?limit=20&count=20"
+      const baseURL = "https://www.reddit.com/r/wallpapers.json?limit=15&count=15"
 
       var url = baseURL
       if (page != null) {
@@ -127,44 +125,41 @@ export default {
       
     },
 
-    async saveOptions() {
 
+    async saveImage(/*callback function (optional)*/ setimg) {
       var currentLightbox = this.currentLightbox
       var title = currentLightbox.data.title.replace(/\s/g, '_')
       console.log(title)
-      // eslint-disable-next-line no-unused-vars
-      // const filePath = await dialog.showSaveDialog({
-      //   buttonLabel: 'Save image',
-      //   // defaultPath: ``
-      // })
-
 
       var URL = currentLightbox.data.preview.images[0].source.url
       
 
       console.log(URL)
-      // const Path = path.resolve('images/',  `${title}.jpg`)
-      // console.log(Path)
-      // const writer = fs.createWriteStream(Path)
-
-
-      // axios({
-      //   url:URL,
-      //   method: 'GET',
-      //   responseType: 'stream'
-      // })
-      // .then((response) => {
-      //   response.data.pipe(writer)
-      // })
+    
       ipcRenderer.send('download', {
         url: URL,
         title: title,
         // directory: 
       })
       ipcRenderer.on("download complete", (event, file) => {
-        console.log(file); // Full file path
-      });
+        // console.log(file); // Full file path
+        if(setimg) {
+          setimg(file);
+        }
+      })
+    },
 
+    async setImage(filePath) {
+      // console.log(filePath)
+      await wallpaper.set(filePath);
+    },
+
+    async saveWallpaper() {
+      this.saveImage();
+    },
+
+    async setWallpaper() {
+      this.saveImage(this.setImage);
     },
 
 
