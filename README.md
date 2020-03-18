@@ -1,4 +1,4 @@
-# wallpapers
+# a desktop wallpaper engine for http://reddit.com/r/wallpapers 
 
 ## Project setup
 ```
@@ -12,7 +12,7 @@ npm run electron:serve
 
 ### Compiles and minifies for production
 ```
-npm run build
+npm run electron:build
 ```
 
 ### Lints and fixes files

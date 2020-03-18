@@ -108,10 +108,6 @@ export default {
 
             post.data.preview.images[0].source.url = removeAmp(post.data.preview.images[0].source.url);
           })
-          console.log(this.postsWithPreview);
-        })
-        .catch(error => {
-          console.log(error)
         })
 
     },
@@ -120,7 +116,6 @@ export default {
       let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement
         .offsetHeight;
       if (bottomOfWindow) {
-        console.log("End reached")
         if (this.next != null) {
           this.getPosts(this.next)
         }
@@ -131,13 +126,8 @@ export default {
 
     async saveImage( /*callback function (optional)*/ setimg) {
       var currentLightbox = this.currentLightbox
-      var title = currentLightbox.data.title.replace(/\s/g, '_')
-      console.log(title)
 
       var URL = currentLightbox.data.preview.images[0].source.url
-
-
-      console.log(URL)
 
       ipcRenderer.send('download', {
         url: URL,
@@ -176,7 +166,6 @@ export default {
         properties: ['openDirectory', 'createDirectory', 'promptToCreate' ]
       })
       this.path = filepath[0]
-      console.log(this.path)
     },
 
     showLightbox(post) {

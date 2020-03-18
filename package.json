@@ -19,6 +19,7 @@
     "core-js": "^3.4.4",
     "css-loader": "^3.4.2",
     "electron-dl": "^3.0.0",
+    "electron-packager": "^14.2.1",
     "fibers": "^4.0.2",
     "fs": "0.0.1-security",
     "jquery": "^3.4.1",
