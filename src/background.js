@@ -1,6 +1,6 @@
 'use strict'
 
-const {download} = require('electron-dl')
+const { download } = require('electron-dl')
 import { app, protocol, BrowserWindow, shell, ipcMain } from 'electron'
 import {
   createProtocol
@@ -22,6 +22,8 @@ function createWindow () {
     height: 600, 
     minHeight: 600,
     minWidth: 800,
+    icon: './public/reddit.png',
+    title: "wallpappr",
     webPreferences: {
       nodeIntegration: true
   } })
@@ -86,11 +88,16 @@ app.on('ready', async () => {
   }
   createWindow()
 
-  ipcMain.on('download', async (event, info) => {
-
-    download(BrowserWindow.getFocusedWindow(), info.url, {directory: app.getPath('downloads'), 
-                                                          openFolderWhenDone: false,
-                                                          })
+  ipcMain.on('download', async (event, info) => { 
+    const defaultPath = app.getPath('downloads')
+    var currentPath
+    if (!info.directory) currentPath = defaultPath
+    else currentPath = info.directory
+    // console.log(info.directory)
+    download(BrowserWindow.getFocusedWindow(), info.url, {
+      directory: currentPath, 
+      openFolderWhenDone: false,
+    })
     .then((dl) => {
       win.webContents.send("download complete", dl.getSavePath())
       // console.log(dl.getSavePath())
