@@ -1,16 +1,27 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <!-- <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> -->
-    </div>
-    <router-view/>
+    <div id="nav"></div>
 
+    <tile/>
   </div>
 </template>
 
+<script>
+
+import tile from '@/components/tile.vue'
+export default {
+  components: {
+    tile,
+  }
+}
+</script>
+
 <style scoped>
 
+
+::-webkit-scrollbar {
+    display: none;
+}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

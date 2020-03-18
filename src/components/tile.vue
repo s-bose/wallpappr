@@ -23,172 +23,186 @@
             <p></p>
           </div>
           <div class="icons">
-            <a href="#"><i class="fa fa-heart-o"></i></a>
-            <a href="#" @click.prevent="saveWallpaper"><i class="fa fa-arrow-down"></i></a>
-            <a href="#" @click.prevent="setWallpaper"><i class="fa fa-paint-roller"></i></a>
+            <a href="#" ><i class="far fa-folder"></i></a>
+            <a href="#" @click="saveWallpaper"><i class="fa fa-arrow-down"></i></a>
+            <a href="#" @click="setWallpaper"><i class="fa fa-paint-roller"></i></a>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
 
 <script defer>
 
-import axios from 'axios'
-import { ipcRenderer } from 'electron'
-const wallpaper = require('wallpaper')
+  import axios from 'axios'
+  import { ipcRenderer } from 'electron'
+  const wallpaper = require('wallpaper')
 
 
-export default {
-  name: 'tile',
-  props: {
-    msg: String
-  },
-  data() {
-    return {
-      postsWithPreview: [],
-      postsLoading: false,
-      next: null,
-      currentLightbox: null,
-    }
-  },
-  components: {
+  export default {
+    name: 'tile',
+    props: {
 
-  },
-  created() {
-
-    this.getPosts()
-
-    window.addEventListener('scroll', this.handleScroll)
-     
-  },
-
-  methods: {
-
-    getPosts(page) {
-      const baseURL = "https://www.reddit.com/r/wallpapers.json?limit=15&count=15"
-
-      var url = baseURL
-      if (page != null) {
-        url = baseURL + '&after=' + page
+    },
+    data() {
+      return {
+        postsWithPreview: [],
+        postsLoading: false,
+        next: null,
+        currentLightbox: null,
       }
+    },
+    components: {
 
-      axios.get(url)
-         .then(response => {
+    },
+    created() {
 
-        var postObjList = response.data.data.children
-        
-        //filtering out the posts with no preview image
-        postObjList = postObjList.filter(function (post) {
-           return post.data.preview 
-           })
+      this.getPosts()
 
+      window.addEventListener('scroll', this.handleScroll)
 
-        this.next = response.data.data.after
-        this.postsLoading = false
-        
-        //appending new GET response to the array
-        this.postsWithPreview = this.postsWithPreview.concat(postObjList)
+    },
 
+    methods: {
 
-        function removeAmp(url) { // ** replacing all occurence of '&amp;' with '&'
-          const parseResult = new DOMParser().parseFromString(url, "text/html");
-          const parsedURL = parseResult.documentElement.textContent;
-          // console.log(parsedURL);
-          return parsedURL;
+      getPosts(page) {
+        const baseURL = "https://www.reddit.com/r/wallpapers.json?limit=15&count=15"
+
+        var url = baseURL
+        if (page != null) {
+          url = baseURL + '&after=' + page
         }
-        this.postsWithPreview.forEach(function (post) {
-          post.data.preview.images[0].resolutions.forEach(function (res) {
-            res.url = removeAmp(res.url);
+
+        axios.get(url)
+          .then(response => {
+
+            var postObjList = response.data.data.children
+
+            //filtering out the posts with no preview image
+            postObjList = postObjList.filter(function (post) {
+              return post.data.preview
+            })
+
+
+            this.next = response.data.data.after
+            this.postsLoading = false
+
+            //appending new GET response to the array
+            this.postsWithPreview = this.postsWithPreview.concat(postObjList)
+
+
+            function removeAmp(url) { // ** replacing all occurence of '&amp;' with '&'
+              const parseResult = new DOMParser().parseFromString(url, "text/html");
+              const parsedURL = parseResult.documentElement.textContent;
+              // console.log(parsedURL);
+              return parsedURL;
+            }
+            this.postsWithPreview.forEach(function (post) {
+              post.data.preview.images[0].resolutions.forEach(function (res) {
+                res.url = removeAmp(res.url);
+              })
+
+              post.data.preview.images[0].source.url = removeAmp(post.data.preview.images[0].source.url);
+            })
+            console.log(this.postsWithPreview);
+          })
+          .catch(error => {
+            console.log(error)
           })
 
-          post.data.preview.images[0].source.url = removeAmp(post.data.preview.images[0].source.url);
+      },
+
+      handleScroll() {
+        let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement
+          .offsetHeight;
+        if (bottomOfWindow) {
+          console.log("End reached")
+          if (this.next != null) {
+            this.getPosts(this.next)
+          }
+        }
+
+      },
+
+
+      async saveImage( /*callback function (optional)*/ setimg) {
+        var currentLightbox = this.currentLightbox
+        var title = currentLightbox.data.title.replace(/\s/g, '_')
+        console.log(title)
+
+        var URL = currentLightbox.data.preview.images[0].source.url
+
+
+        console.log(URL)
+
+        ipcRenderer.send('download', {
+          url: URL,
+          title: title,
+          // directory: 
         })
-        console.log(this.postsWithPreview);
-      })
-      .catch(error => {
-        console.log(error)
-      })
+        
+        this.$buefy.toast.open({
+          message: 'Downloading...',
+          type: 'is-dark',
+          position: 'is-bottom'
+        })
+        
+        ipcRenderer.on("download complete", (event, file) => {
+          // console.log(file); // Full file path
+          if (setimg) {
+            setimg(file);
+          }
+        })
+      },
 
-    },
+      async setImage(filePath) {
+        // console.log(filePath)
+        await wallpaper.set(filePath)
+      },
 
-    handleScroll() {
-      let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-      if (bottomOfWindow) {
-        console.log("End reached")
-        if (this.next != null) {
-          this.getPosts(this.next)
+      async saveWallpaper() {
+        this.saveImage();
+      },
+
+      async setWallpaper() {
+        this.saveImage(this.setImage);
+      },
+
+
+      showLightbox(post) {
+        this.currentLightbox = post
+        var previewList = post.data.preview
+        var lightbox = document.querySelector('.lightbox')
+        var image = lightbox.getElementsByTagName('img')[0]
+        var imageSrcs = previewList.images[0]
+        image.src = imageSrcs.source.url
+        // eslint-disable-next-line no-unused-vars
+        const loadingComponent = this.$buefy.loading.open({
+          canCancel: ['escape', 'outside'],
+        })
+
+        image.onload = function () {
+          loadingComponent.close()
+          lightbox.classList.add('active')
+          var info = document.getElementById('info').childNodes
+          info[0].textContent = post.data.title
+          info[0].href = "http://reddit.com" + post.data.permalink
+          info[1].textContent = 'u/' + post.data.author
         }
+
+
+        lightbox.addEventListener('click', e => {
+          if (e.target !== e.currentTarget) return
+          lightbox.classList.remove('active')
+          lightbox.getElementsByTagName('img')[0].src = "" /*reset src*/
+          this.currentLightbox = null
+        })
       }
-      
-    },
-
-
-    async saveImage(/*callback function (optional)*/ setimg) {
-      var currentLightbox = this.currentLightbox
-      var title = currentLightbox.data.title.replace(/\s/g, '_')
-      console.log(title)
-
-      var URL = currentLightbox.data.preview.images[0].source.url
-      
-
-      console.log(URL)
-    
-      ipcRenderer.send('download', {
-        url: URL,
-        title: title,
-        // directory: 
-      })
-      ipcRenderer.on("download complete", (event, file) => {
-        // console.log(file); // Full file path
-        if(setimg) {
-          setimg(file);
-        }
-      })
-    },
-
-    async setImage(filePath) {
-      // console.log(filePath)
-      await wallpaper.set(filePath);
-    },
-
-    async saveWallpaper() {
-      this.saveImage();
-    },
-
-    async setWallpaper() {
-      this.saveImage(this.setImage);
-    },
-
-
-    showLightbox(post) {
-      this.currentLightbox = post
-      var previewList = post.data.preview
-      var lightbox = document.querySelector('.lightbox')
-      var image = lightbox.getElementsByTagName('img')[0]
-      var imageSrcs = previewList.images[0]
-      image.src = imageSrcs.source.url
-
-      image.onload = function () {
-        lightbox.classList.add('active')
-        var info = document.getElementById('info').childNodes
-        info[0].textContent = post.data.title
-        info[0].href = "http://reddit.com" + post.data.permalink
-        info[1].textContent = 'u/' + post.data.author
-      }
-
-
-      lightbox.addEventListener('click', e => {
-        if (e.target !== e.currentTarget) return
-        lightbox.classList.remove('active')
-        lightbox.getElementsByTagName('img')[0].src = "" /*reset src*/
-        this.currentLightbox = null
-      })
     }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

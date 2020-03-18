@@ -89,7 +89,7 @@ app.on('ready', async () => {
   ipcMain.on('download', async (event, info) => {
 
     download(BrowserWindow.getFocusedWindow(), info.url, {directory: app.getPath('downloads'), 
-                                                          openFolderWhenDone: true,
+                                                          openFolderWhenDone: false,
                                                           })
     .then((dl) => {
       win.webContents.send("download complete", dl.getSavePath())
