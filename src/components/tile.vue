@@ -125,34 +125,36 @@ export default {
     },
 
 
-    async saveWallpaper() {
-      var currentLightbox = this.currentLightbox
+    saveWallpaper() {
+      return new Promise((resolve) => {
+        var currentLightbox = this.currentLightbox
 
-      var URL = currentLightbox.data.preview.images[0].source.url
+        var URL = currentLightbox.data.preview.images[0].source.url
 
-      ipcRenderer.send('download', {
-        url: URL,
-        directory: this.path
+        ipcRenderer.send('download', {
+          url: URL,
+          directory: this.path
+        })
+        
+        this.$buefy.toast.open({
+          message: 'Downloading...',
+          type: 'is-dark',
+          position: 'is-bottom'
+        })
+        
+        ipcRenderer.on("download complete", (event, file) => {
+          resolve(file)
+        })
       })
       
-      this.$buefy.toast.open({
-        message: 'Downloading...',
-        type: 'is-dark',
-        position: 'is-bottom'
-      })
-      
-      ipcRenderer.on("download complete", (event, file) => {
-        this.downloadDirecory(file)
-      })
     },
 
-    downloadDirectory(arg) {
-      this.dldir = arg
-    },
 
     async setWallpaper() {
-      await this.saveWallpaper()
-      await wallpaper.set(this.dlpath)
+      const file = await this.saveWallpaper()
+      console.log(file)
+      wallpaper.set(file)
+      
     },
 
 
