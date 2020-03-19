@@ -158,7 +158,7 @@ export default {
     },
 
 
-    async changeDirectory() {
+    changeDirectory() {
       const filepath = dialog.showOpenDialogSync({
         properties: ['openDirectory', 'createDirectory', 'promptToCreate' ]
       })
