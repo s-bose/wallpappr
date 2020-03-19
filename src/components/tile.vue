@@ -152,7 +152,6 @@ export default {
 
     async setWallpaper() {
       const file = await this.saveWallpaper()
-      console.log(file)
       wallpaper.set(file)
       
     },
