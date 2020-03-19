@@ -10,7 +10,7 @@ npm install
 npm run electron:serve
 ```
 
-### Compiles and minifies for production
+### Build setup file in /dist_electron
 ```
 npm run electron:build
 ```
