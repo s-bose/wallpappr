@@ -54,6 +54,7 @@ export default {
       next: null,
       currentLightbox: null,
       path: null,
+      dldir: null,
     }
   },
   components: {
@@ -124,7 +125,7 @@ export default {
     },
 
 
-    async saveImage( /*callback function (optional)*/ setimg) {
+    async saveWallpaper() {
       var currentLightbox = this.currentLightbox
 
       var URL = currentLightbox.data.preview.images[0].source.url
@@ -141,25 +142,19 @@ export default {
       })
       
       ipcRenderer.on("download complete", (event, file) => {
-        // console.log(file); // Full file path
-        if (setimg) {
-          setimg(file);
-        }
+        this.downloadDirecory(file)
       })
     },
 
-    async setImage(filePath) {
-      // console.log(filePath)
-      await wallpaper.set(filePath)
-    },
-
-    async saveWallpaper() {
-      this.saveImage();
+    downloadDirectory(arg) {
+      this.dldir = arg
     },
 
     async setWallpaper() {
-      this.saveImage(this.setImage);
+      await this.saveWallpaper()
+      await wallpaper.set(this.dlpath)
     },
+
 
     async changeDirectory() {
       const filepath = dialog.showOpenDialogSync({
