@@ -82,10 +82,11 @@ export default {
         .then(response => {
 
           var postObjList = response.data.data.children
-
+          console.log(postObjList)
           //filtering out the posts with no preview image
           postObjList = postObjList.filter(function (post) {
-            return post.data.preview
+            if (post.data.preview.images[0].resolutions[2])
+              return post.data.preview
           })
 
 
