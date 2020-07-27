@@ -1,24 +1,28 @@
-# a desktop wallpaper engine for http://reddit.com/r/wallpapers 
+#### A desktop wallpaper engine for http://reddit.com/r/wallpapers 
 
-## Project setup
+![icon](./build/icons/icon.ico)
+
+---
+`WallpappR` is a desktop application made using `ElectronJS` and `VueJS` and the Reddit web API to fetch 
+wallpapers from the subreddit *r/wallpapers*, no Login required.
+
+Users can download, or set wallpapers directly from the app. 
+Users can also change the download directory.
+Additionally, links to the original posts can be opened from the app.
+
+---
+##### To compile and run development server
+
 ```
-npm install
+npm run electron:serve 
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run electron:serve
-```
 
-### Build setup file in /dist_electron
+##### To build the installer in /dist_electron
 ```
 npm run electron:build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+It is recommended to use `npm update` after the initial `npm install` to resolve Babbel errors. 
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+

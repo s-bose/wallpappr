@@ -1,3 +1,5 @@
+/* global __static */
+
 'use strict'
 
 const { download } = require('electron-dl')
@@ -6,6 +8,7 @@ import {
   createProtocol
   //installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+import path from 'path'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -22,7 +25,7 @@ function createWindow () {
     height: 600, 
     minHeight: 600,
     minWidth: 800,
-    icon: './public/reddit.png',
+    icon: path.join(__static, 'icon.png'),
     title: "wallpappr",
     webPreferences: {
       nodeIntegration: true
