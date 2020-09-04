@@ -23,6 +23,8 @@ npm run electron:serve
 npm run electron:build
 ```
 
-It is recommended to use `npm update` after the initial `npm install` to resolve Babbel errors. 
+It is recommended to use `npm update` after the initial `npm install` to resolve Babbel errors.
+
+Youtube demo: https://www.youtube.com/watch?v=JNU3o8XMJS4
 
 
