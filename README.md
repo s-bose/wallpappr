@@ -28,3 +28,5 @@ It is recommended to use `npm update` after the initial `npm install` to resolve
 Youtube demo: https://www.youtube.com/watch?v=JNU3o8XMJS4
 
 
+#### Setup File (Windows)
+https://sbose.itch.io/wallpappr
