@@ -1,4 +1,4 @@
-#### A desktop wallpaper engine for http://reddit.com/r/wallpapers 
+### A desktop wallpaper engine for http://reddit.com/r/wallpapers 
 
 ![icon](./build/icons/icon.ico)
 
@@ -28,7 +28,7 @@ It is recommended to use `npm update` after the initial `npm install` to resolve
 Youtube demo: https://www.youtube.com/watch?v=JNU3o8XMJS4
 
 
-#### Setup File (Windows & Mac)
+### Setup File (Windows & Mac)
 https://sbose.itch.io/wallpappr
 
 for Linux, you can build your own executable by following the build process.
