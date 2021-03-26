@@ -30,3 +30,5 @@ Youtube demo: https://www.youtube.com/watch?v=JNU3o8XMJS4
 
 #### Setup File (Windows & Mac)
 https://sbose.itch.io/wallpappr
+
+for Linux, you can build your own executable by following the build process.
