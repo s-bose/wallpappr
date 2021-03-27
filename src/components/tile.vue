@@ -23,9 +23,9 @@
             <p></p>
           </div>
           <div class="icons">
-            <a href="#" @click="changeDirectory"><i class="far fa-folder"></i></a>
-            <a href="#" @click="saveWallpaper"><i class="fa fa-arrow-down"></i></a>
-            <a href="#" @click="setWallpaper"><i class="fa fa-paint-roller"></i></a>
+            <a href="#" @click.prevent="changeDirectory"><i class="far fa-folder"></i></a>
+            <a href="#" @click.prevent="saveWallpaper"><i class="fa fa-arrow-down"></i></a>
+            <a href="#" @click.prevent="setWallpaper"><i class="fa fa-paint-roller"></i></a>
           </div>
         </div>
       </div>
