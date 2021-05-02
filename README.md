@@ -11,6 +11,11 @@ Users can also change the download directory.
 Additionally, links to the original posts can be opened from the app.
 
 ---
+##### To install npm dependencies
+```
+npm install
+```
+
 ##### To compile and run development server
 
 ```
