@@ -32,10 +32,16 @@ npm run electron:build
 Youtube demo: https://www.youtube.com/watch?v=JNU3o8XMJS4
 
 
-### Setup File (Windows & Mac)
-https://sbose.itch.io/wallpappr
+## Setup
+
+### Windows & Mac
+
+Binaries are available from the Releases section.
 
 ### Linux (Snap)
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/wallpappr)
+
+Other formats (i.e. AppImage) can be built manually by following the above-mentioned build process.
+
 
