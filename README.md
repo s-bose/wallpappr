@@ -35,4 +35,7 @@ Youtube demo: https://www.youtube.com/watch?v=JNU3o8XMJS4
 ### Setup File (Windows & Mac)
 https://sbose.itch.io/wallpappr
 
-for Linux, you can build your own executable by following the build process.
+### Linux (Snap)
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/wallpappr)
+
