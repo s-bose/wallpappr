@@ -25,7 +25,7 @@
     "fs": "0.0.1-security",
     "jquery": "^3.5.1",
     "md5": "^2.2.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "popper.js": "^1.16.1",
     "sass": "^1.26.10",
     "sass-loader": "^8.0.2",
