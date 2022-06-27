@@ -45,4 +45,5 @@ Binaries are available from the Releases section.
 Other formats (i.e. AppImage) can be built manually by following the above-mentioned build process.
 
 
-### Note: Some times after system upgrade the snap package may stop working. In that case, please reinstall the snap package.
+### Note
+Some times after system upgrade the snap package may stop working. In that case, please reinstall the snap package.
