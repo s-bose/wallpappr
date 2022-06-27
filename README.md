@@ -45,5 +45,8 @@ Binaries are available from the Releases section.
 Other formats (i.e. AppImage) can be built manually by following the above-mentioned build process.
 
 
-### Note
+### Note 1
 Some times after system upgrade the snap package may stop working. In that case, please reinstall the snap package.
+
+### Note 2
+For Linux users, changing wallpapers do not work on Gnome version 42 or above, since it depends on npm package [wallpaper](https://www.npmjs.com/package/wallpaper), which is currently having the same problem. See more [here](https://github.com/sindresorhus/wallpaper/issues/82).
